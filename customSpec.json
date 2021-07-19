@@ -1,13 +1,13 @@
 {
-  "name": "Local Phu Quoc Doge",
+  "name": "Phu Quoc Doge Development",
   "id": "phuquocdoge1",
-  "chainType": "Local",
+  "chainType": "Development",
   "bootNodes": [],
   "telemetryEndpoints": null,
   "protocolId": "phuquocdoge1",
   "properties": {
     "ss58Format": 2,
-    "tokenDecimals": 12,
+    "tokenDecimals": 10,
     "tokenSymbol": "PQD"
   },
   "consensusEngine": null,
@@ -40,7 +40,7 @@
         "balances": [
           [
             "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-            1152921504606846976
+            100000000000000000000000000
           ],
           [
             "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
