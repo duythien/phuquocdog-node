@@ -1,8 +1,8 @@
-# Substrate Node Template
+# Phu Quoc Doge Node
 
-[![Try on playground](https://img.shields.io/badge/Playground-Node_Template-brightgreen?logo=Parity%20Substrate)](https://playground.substrate.dev/?deploy=node-template)
+Phu Quoc Doge is a Substrate-based Polkadot parachain. Phu Quoc Doge is committed to providing easy-to-use blockchain infrastructure and creating a one-stop comprehensive infrastructure platform, which aims to reduce the threshold and cost for developers, while bringing them great returns.
 
-A fresh FRAME-based [Substrate](https://www.substrate.io/) node, ready for hacking :rocket:
+PQD is the native token of the Polkadot network in a similar way that BTC is the native token of Bitcoin or Ether is the native token of the Ethereum blockchain.
 
 ## Getting Started
 
@@ -41,7 +41,7 @@ Once the project has been built, the following command can be used to explore al
 subcommands:
 
 ```sh
-./target/release/node-template -h
+./target/release/phuquocdoge-node -h
 ```
 
 ## Run
@@ -55,19 +55,19 @@ node.
 This command will start the single-node development chain with persistent state:
 
 ```bash
-./target/release/node-template --dev
+./target/release/phuquocdoge-node --dev
 ```
 
 Purge the development chain's state:
 
 ```bash
-./target/release/node-template purge-chain --dev
+./target/release/phuquocdoge-node purge-chain --dev
 ```
 
 Start the development chain with detailed logging:
 
 ```bash
-RUST_LOG=debug RUST_BACKTRACE=1 ./target/release/node-template -lruntime=debug --dev
+RUST_LOG=debug RUST_BACKTRACE=1 ./target/release/phuquocdoge-node -lruntime=debug --dev
 ```
 
 ### Connect with Polkadot-JS Apps Front-end
@@ -171,28 +171,3 @@ A FRAME pallet is compromised of a number of blockchain primitives:
 -   Config: The `Config` configuration interface is used to define the types and parameters upon
     which a FRAME pallet depends.
 
-### Run in Docker
-
-First, install [Docker](https://docs.docker.com/get-docker/) and
-[Docker Compose](https://docs.docker.com/compose/install/).
-
-Then run the following command to start a single node development chain.
-
-```bash
-./scripts/docker_run.sh
-```
-
-This command will firstly compile your code, and then start a local development network. You can
-also replace the default command (`cargo build --release && ./target/release/node-template --dev --ws-external`)
-by appending your own. A few useful ones are as follow.
-
-```bash
-# Run Substrate node without re-compiling
-./scripts/docker_run.sh ./target/release/node-template --dev --ws-external
-
-# Purge the local dev chain
-./scripts/docker_run.sh ./target/release/node-template purge-chain --dev
-
-# Check whether the code is compilable
-./scripts/docker_run.sh cargo check
-```
