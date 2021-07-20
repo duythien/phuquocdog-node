@@ -1,10 +1,15 @@
 {
-  "name": "Phu Quoc Doge Development",
-  "id": "phuquocdoge1",
-  "chainType": "Development",
+  "name": "Phu Quoc Doge Mainnest",
+  "id": "127",
+  "chainType": "Live",
   "bootNodes": [],
-  "telemetryEndpoints": null,
-  "protocolId": "phuquocdoge1",
+  "telemetryEndpoints": [
+    [
+      "/dns/telemetry.polkadot.io/tcp/443/x-parity-wss/%2Fsubmit%2F",
+      0
+    ]
+  ],
+  "protocolId": "phuquocdoge",
   "properties": {
     "ss58Format": 2,
     "tokenDecimals": 10,
@@ -20,14 +25,14 @@
       },
       "palletAura": {
         "authorities": [
-          "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+          "5GErSkGadtY7rpoPZR1CWPm2CkZEFfvghucFAZTm91BEggSd",
           "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty"
         ]
       },
       "palletGrandpa": {
         "authorities": [
           [
-            "5FA9nQDVg267DEd8m1ZypXLBnvN7SFxYwV7ndqSYGiN9TTpu",
+            "5GErSkGadtY7rpoPZR1CWPm2CkZEFfvghucFAZTm91BEggSd",
             1
           ],
           [
@@ -39,8 +44,8 @@
       "palletBalances": {
         "balances": [
           [
-            "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-            100000000000000000000000000
+            "5GErSkGadtY7rpoPZR1CWPm2CkZEFfvghucFAZTm91BEggSd",
+            1000000000000000000
           ],
           [
             "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
@@ -89,7 +94,7 @@
         ]
       },
       "palletSudo": {
-        "key": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
+        "key": "5GErSkGadtY7rpoPZR1CWPm2CkZEFfvghucFAZTm91BEggSd"
       }
     }
   }
