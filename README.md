@@ -171,3 +171,10 @@ A FRAME pallet is compromised of a number of blockchain primitives:
 -   Config: The `Config` configuration interface is used to define the types and parameters upon
     which a FRAME pallet depends.
 
+### Note
+
+Build customSpecRaw: 
+
+./target/release/phuquocdoge-node build-spec --chain=customSpec.json --raw --disable-default-bootnode > customSpecRaw.json
+
+
