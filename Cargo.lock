@@ -4358,7 +4358,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "phuquocdoge-node"
+name = "phuquocdog"
 version = "3.0.0"
 dependencies = [
  "frame-benchmarking",
@@ -4366,7 +4366,7 @@ dependencies = [
  "hex-literal",
  "jsonrpc-core",
  "pallet-transaction-payment-rpc",
- "phuquocdoge-runtime",
+ "phuquocdog-runtime",
  "sc-basic-authorship",
  "sc-cli",
  "sc-client-api",
@@ -4396,7 +4396,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "phuquocdoge-runtime"
+name = "phuquocdog-runtime"
 version = "3.0.0"
 dependencies = [
  "frame-benchmarking",

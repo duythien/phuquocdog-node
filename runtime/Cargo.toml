@@ -3,7 +3,7 @@ authors = ['Substrate DevHub <https://github.com/phuquocdoge>']
 edition = '2018'
 homepage = 'https://phuquocdoge.com'
 license = 'Unlicense'
-name = 'phuquocdoge-runtime'
+name = 'phuquocdog-runtime'
 repository = 'https://github.com/phuquocdoge/node'
 version = '3.0.0'
 
