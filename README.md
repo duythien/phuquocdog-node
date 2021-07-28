@@ -41,7 +41,7 @@ Once the project has been built, the following command can be used to explore al
 subcommands:
 
 ```sh
-./target/release/phuquocdoge-node -h
+./target/release/phuquocdog -h
 ```
 
 ## Run
@@ -55,19 +55,19 @@ node.
 This command will start the single-node development chain with persistent state:
 
 ```bash
-./target/release/phuquocdoge-node --dev
+./target/release/phuquocdog --dev
 ```
 
 Purge the development chain's state:
 
 ```bash
-./target/release/phuquocdoge-node purge-chain --dev
+./target/release/phuquocdog purge-chain --dev
 ```
 
 Start the development chain with detailed logging:
 
 ```bash
-RUST_LOG=debug RUST_BACKTRACE=1 ./target/release/phuquocdoge-node -lruntime=debug --dev
+RUST_LOG=debug RUST_BACKTRACE=1 ./target/release/phuquocdog -lruntime=debug --dev
 ```
 
 ### Connect with Polkadot-JS Apps Front-end
@@ -176,6 +176,6 @@ A FRAME pallet is compromised of a number of blockchain primitives:
 Build customSpecRaw: 
 
 ```
-./target/release/phuquocdoge-node build-spec --chain=customSpec.json --raw --disable-default-bootnode > customSpecRaw.json
+./target/release/phuquocdog build-spec --chain=customSpec.json --raw --disable-default-bootnode > customSpecRaw.json
 ```
 
