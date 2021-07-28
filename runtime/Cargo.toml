@@ -1,10 +1,10 @@
 [package]
-authors = ['Substrate DevHub <https://github.com/phuquocdoge>']
+authors = ['Substrate DevHub <https://github.com/phuquocdog>']
 edition = '2018'
-homepage = 'https://phuquocdoge.com'
+homepage = 'https://phuquocdog.com'
 license = 'Unlicense'
 name = 'phuquocdog-runtime'
-repository = 'https://github.com/phuquocdoge/node'
+repository = 'https://github.com/phuquocdog/node'
 version = '3.0.0'
 
 [package.metadata.docs.rs]

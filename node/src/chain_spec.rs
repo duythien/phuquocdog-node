@@ -71,7 +71,7 @@ pub fn development_config() -> Result<ChainSpec, String> {
 		// Protocol ID
 		None,
 		// Properties
-		Some(phuquocdoge_properties()),
+		Some(phuquocdog_properties()),
 		// Extensions
 		None,
 	))
@@ -119,7 +119,7 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
 		// Protocol ID
 		None,
 		// Properties
-		Some(phuquocdoge_properties()),
+		Some(phuquocdog_properties()),
 		// Extensions
 		None,
 	))
@@ -156,7 +156,7 @@ fn testnet_genesis(
 	}
 }
 
-pub fn phuquocdoge_properties() -> Properties {
+pub fn phuquocdog_properties() -> Properties {
 	let mut properties = Properties::new();
 
 	properties.insert("ss58Format".into(), 28.into());
