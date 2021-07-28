@@ -43,7 +43,7 @@ pub fn development_config() -> Result<ChainSpec, String> {
 
 	Ok(ChainSpec::from_genesis(
 		// Name
-		"Phu Quoc Doge Development",
+		"Phu Quoc Dog Development",
 		// ID
 		"dev",
 		ChainType::Development,

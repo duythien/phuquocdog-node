@@ -1,6 +1,6 @@
-# Phu Quoc Doge Node
+# Phu Quoc Dog Node
 
-Phu Quoc Doge is a Substrate-based Polkadot parachain. Phu Quoc Doge is committed to providing easy-to-use blockchain infrastructure and creating a one-stop comprehensive infrastructure platform, which aims to reduce the threshold and cost for developers, while bringing them great returns.
+Phu Quoc Dog is a Substrate-based Polkadot parachain. Phu Quoc Dog is committed to providing easy-to-use blockchain infrastructure and creating a one-stop comprehensive infrastructure platform, which aims to reduce the threshold and cost for developers, while bringing them great returns.
 
 PQD is the native token of the Polkadot network in a similar way that BTC is the native token of Bitcoin or Ether is the native token of the Ethereum blockchain.
 
