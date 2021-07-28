@@ -1,5 +1,5 @@
 use sp_core::{Pair, Public, sr25519};
-use phuquocdoge_runtime::{
+use phuquocdog_runtime::{
 	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
 	SudoConfig, SystemConfig, WASM_BINARY, Signature
 };
