@@ -3896,6 +3896,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "pallet-lockable-currency"
+version = "3.0.0"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "serde",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+]
+
+[[package]]
 name = "pallet-nicks"
 version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?tag=monthly-2021-05#70ef0afc86cdef0cba09336acffb08bff08540aa"
@@ -4409,6 +4423,7 @@ dependencies = [
  "pallet-aura",
  "pallet-balances",
  "pallet-grandpa",
+ "pallet-lockable-currency",
  "pallet-nicks",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
