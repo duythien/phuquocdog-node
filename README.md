@@ -24,6 +24,8 @@ Use Rust's native `cargo` command to build and launch the template node:
 
 ```sh
 cargo run --release -- --dev --tmp
+
+// cargo +nightly run --release --features=runtime-benchmarks
 ```
 
 ### Build

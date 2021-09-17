@@ -19,8 +19,9 @@
 
 /// Money matters.
 pub mod currency {
-	use phuquocdog_primitives::Balance;
-
+	//use phuquocdog_primitives::Balance;
+	pub type Balance = u32;
+	
 	pub const UNITS: Balance = 10_000_000_000;
 	pub const DOLLARS: Balance = UNITS; // 10_000_000_000
 	pub const CENTS: Balance = DOLLARS / 100; // 100_000_000

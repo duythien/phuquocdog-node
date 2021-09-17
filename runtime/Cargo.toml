@@ -19,12 +19,22 @@ codec = {default-features = false, features = ['derive'], package = 'parity-scal
 hex-literal= {optional = true, version = '0.3.1'}
 pallet-nicks = { default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05' }
 # Substrate dependencies
-frame-benchmarking = {default-features = false, optional = true, version = '3.1.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
-frame-executive = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
-frame-support = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
-frame-system = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
-frame-system-benchmarking = {default-features = false, optional = true, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
-frame-system-rpc-runtime-api = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
+# frame-benchmarking = {default-features = false, optional = true, version = '3.1.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
+# frame-executive = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
+# frame-support = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
+# frame-system = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
+# frame-system-benchmarking = {default-features = false, optional = true, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
+# frame-system-rpc-runtime-api = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
+frame-benchmarking = { git = "https://github.com/paritytech/substrate", branch = "master", default-features = false, optional = true }
+frame-executive  = { git = "https://github.com/paritytech/substrate", branch = "master", default-features = false, optional = true }
+fframe-support = { git = "https://github.com/paritytech/substrate", branch = "master", default-features = false, optional = true }
+frame-system  = { git = "https://github.com/paritytech/substrate", branch = "master", default-features = false, optional = true }
+frame-try-runtime = { git = "https://github.com/paritytech/substrate", branch = "master", default-features = false, optional = true }
+frame-system-rpc-runtime-api = { git = "https://github.com/paritytech/substrate", branch = "master", default-features = false, optional = true }
+frame-system-benchmarking = { git = "https://github.com/paritytech/substrate", branch = "master", default-features = false, optional = true }
+pallet-offences-benchmarking = { git = "https://github.com/paritytech/substrate", branch = "master", default-features = false, optional = true }
+pallet-session-benchmarking = { git = "https://github.com/paritytech/substrate", branch = "master", default-features = false, optional = true }
+
 pallet-aura = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
 pallet-balances = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
 pallet-grandpa = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
@@ -45,6 +55,8 @@ sp-std = {default-features = false, version = '3.0.0', git = 'https://github.com
 sp-transaction-pool = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
 sp-version = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
 
+#babe-primitives = {package = "sp-consensus-babe",default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
+babe-primitives = { package = "sp-consensus-babe", git = "https://github.com/paritytech/substrate", branch = "master", default-features = false }
 # local dependencies
 pallet-template = {default-features = false, version = '3.0.0', path = '../pallets/template'}
 pallet-lockable-currency = {default-features = false, version = '3.0.0', path = '../pallets/lockable-currency'}
