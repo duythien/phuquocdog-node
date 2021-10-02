@@ -1,0 +1,35 @@
+[package]
+authors = ['Substrate DevHub <https://github.com/phuquocdog>']
+description = 'FRAME pallet template for defining custom runtime logic.'
+edition = '2018'
+homepage = 'https://phuquoc.dog'
+license = 'Unlicense'
+name = "phuquocdog-primitives"
+readme = 'README.md'
+repository = 'https://github.com/phuquocdog/node/'
+version = '3.0.0'
+
+[dependencies]
+codec = { package = "parity-scale-codec", version = "2.2.0", default-features = false, features = ["derive"] }
+scale-info = { version = "1.0", default-features = false, features = ["derive"] }
+
+serde = { version = "1.0.101", optional = true }
+frame-system = { default-features = false, git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
+sp-core = { default-features = false, git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
+sp-runtime = { default-features = false, git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
+sp-application-crypto = { default-features = false, git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
+[dev-dependencies]
+sp-serializer = { default-features = false, git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
+pretty_assertions = "0.6.1"
+
+[features]
+default = ["std"]
+std = [
+    "codec/std",
+    "serde",
+    "frame-system/std",
+    "sp-application-crypto/std",
+    "sp-core/std",
+    "sp-runtime/std",
+    "scale-info/std",
+]
