@@ -1,7 +1,7 @@
 use codec::{Decode, Encode};
 #[cfg(feature = "std")]
 use serde::{Deserialize, Serialize};
-use sp_core::{RuntimeDebug, H160};
+use sp_core::{RuntimeDebug};
 
 /// Enumerated asset on chain
 #[derive(Encode, Decode, Copy, Clone, PartialEq, Eq, Ord, PartialOrd, RuntimeDebug)]
