@@ -291,7 +291,7 @@ fn mainnet_genesis_constuctor() -> GenesisConfig {
 
 pub fn mainnet_testnet_config() -> ChainSpec {
     let bootnodes = vec![];
-    const PHUQUOCDOG_PROTOCOL_ID: &str = "pqd";
+    const PHUQUOCDOG_PROTOCOL_ID: &str = "phuquocdog";
     ChainSpec::from_genesis(
         "Phuquocdog Main Network",
         "phuquocdog_main_network",
@@ -329,8 +329,8 @@ pub fn testnet_genesis(
     const ENDOWMENT: u128 = 1_000_000_000 * PQD;
     const STASH: u128 = 200 * PQD;
     // Total Supply in 90_000_000_000
-    // Total funds in treasury for parachain auctions 25%
-    let mut treasury_funds: u128 = 22_500_000_000 * PQD;
+    // Total funds in treasury for parachain auctions 25% and init root account
+    let mut treasury_funds: u128 = 23_500_000_000 * PQD;
     treasury_funds = treasury_funds - adjust_treasury_balance_for_initial_validators(initial_authorities.len(), ENDOWMENT);
 
     // Treasury Account Id
@@ -341,7 +341,9 @@ pub fn testnet_genesis(
         .iter()
         .map(|k| (k.0.clone(), ENDOWMENT)).collect_vec();
     let mut endowed_accounts = vec![
-        //     Treasury Funds
+        // Root key
+        (root_key.clone(), ENDOWMENT),
+        // Treasury Funds
         (treasury_account, treasury_funds),
     ];
     
