@@ -1,0 +1,10 @@
+{
+    "jsonrpc":"2.0",
+    "id":1,
+    "method":"author_insertKey",
+    "params": [
+        "babe",
+        "panda dose welcome ostrich brief pull lawn table arrest worth ranch faculty//1//babe",
+        "0xc23a60cdab013d8a6317e3e88fc956a72c3232eda4fc24ac907658d22a66cb23"
+    ]
+}

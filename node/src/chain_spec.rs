@@ -198,9 +198,13 @@ pub fn development_config() -> ChainSpec {
         ChainType::Development,
         development_config_genesis,
         vec![],
+        // Telemetry
         None,
+        // Protocol ID
         None,
+        // Properties
         Some(phuquocdog_properties()),
+
         Default::default(),
     )
 }

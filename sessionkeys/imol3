@@ -1,0 +1,11 @@
+
+{
+    "jsonrpc":"2.0",
+    "id":1,
+    "method":"author_insertKey",
+    "params": [
+        "imol",
+        "panda dose welcome ostrich brief pull lawn table arrest worth ranch faculty//3//im_online",
+        "0xcf62289f5572ace9efc80e1f2ecc2438975b55c2af4a3e792d8b2a3d752458a0"
+    ]
+}
