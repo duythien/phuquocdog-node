@@ -481,7 +481,8 @@ pub(crate) mod tests {
 
 pub fn phuquocdog_properties() -> Properties {
     let mut properties = Properties::new();
-    properties.insert("ss58Format".into(), 90.into());
+    //properties.insert("ss58Format".into(), 90.into());
+    properties.insert("ss58Format".into(), 42.into());
     properties.insert("tokenDecimals".into(), 10.into());
     properties.insert("tokenSymbol".into(), "PQD".into());
 
