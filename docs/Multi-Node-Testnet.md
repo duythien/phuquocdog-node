@@ -90,7 +90,7 @@ fn mainnet_genesis_constuctor() -> GenesisConfig {
 Recompile
 
 ```
-cargo +nightly run --release --features=runtime-benchmarks
+cargo build --release --features=runtime-benchmarks
 
 ```
 
