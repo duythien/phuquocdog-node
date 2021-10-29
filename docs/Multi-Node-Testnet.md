@@ -141,3 +141,28 @@ Launch first node with the public key above.
 ./target/release/phuquocdog-node --chain quark -d data/validator3 --name validator3 --validator --port 30335 --ws-port 9947 --rpc-port 9935 --ws-external --rpc-cors all --rpc-methods=unsafe --bootnodes /ip4/127.0.0.1/tcp/30333/p2p/12D3KooWRm651Kd5GmsLTHJbgX5chQS5npx9ttLgo46UsegCMoNM
 
 ```
+
+### Setup node session keys
+
+- Copy validators' session keys to babe1 ~ 3, gran1 ~ 3, imol1 ~ 3, audi1 ~ 3, add prefix 0x
+
+- Fill right secret phrase
+
+- Run command to setup node session keys
+
+```
+cd scripts/session_keys
+sh run.sh
+
+```
+Note that the format request should be like this
+
+```
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "author_insertKey",
+  "params": ["<aura/gran>", "<mnemonic phrase>", "<public key>"]
+}
+
+```

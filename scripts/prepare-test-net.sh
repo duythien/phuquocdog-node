@@ -10,7 +10,7 @@ fi
 SECRET="panda dose welcome ostrich brief pull lawn table arrest worth ranch faculty"
 
 generate_account_id() {
-	echo "subkey inspect ${3:-} ${4:-} '$SECRET//$1//$2'"
+	# echo "subkey inspect ${3:-} ${4:-} '$SECRET//$1//$2'"
 	subkey inspect ${3:-} ${4:-} "$SECRET//$1//$2" | grep "Account ID" | awk '{ print $3 }'
 }
 

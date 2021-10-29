@@ -19,3 +19,5 @@ customSpec.json
 
 .key
 data/
+.note.md
+session-keys-prod
