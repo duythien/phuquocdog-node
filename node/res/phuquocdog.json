@@ -3,11 +3,11 @@
   "id": "phuquocdog_main_network",
   "chainType": "Live",
   "bootNodes": [
-    "/ip4/13.59.189.93/tcp/30333/p2p/12D3KooWEc9LZpacBXG48bVVjZNUaXaQHR4qoW74Xf9tmNw1Sk4P"
+    "/dns/p2p01.phuquoc.dog/tcp/30333/p2p/12D3KooWEc9LZpacBXG48bVVjZNUaXaQHR4qoW74Xf9tmNw1Sk4P"
   ],
   "telemetryEndpoints": [
     [
-      "/dns/telemetry.polkadot.io/tcp/443/x-parity-wss/%2Fsubmit%2F",
+      "wss://telemetry.polkadot.io/submit/",
       0
     ]
   ],
