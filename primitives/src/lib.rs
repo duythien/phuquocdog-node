@@ -40,7 +40,7 @@ pub type Hash = sp_core::H256;
 pub type Timestamp = u64;
 
 /// Digest item type.
-pub type DigestItem = generic::DigestItem<Hash>;
+pub type DigestItem = generic::DigestItem;
 /// Header type.
 pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 /// Block type.
@@ -53,14 +53,14 @@ pub type BlockId = generic::BlockId<Block>;
 /// account.
 pub mod report {
     use frame_system::offchain::AppCrypto;
-    use sp_core::crypto::{key_types, KeyTypeId};
+    use sp_core::crypto::{KeyTypeId};
 
     use super::{Signature, Verify};
 
     /// Key type for the reporting module. Used for reporting BABE and GRANDPA
     /// equivocations.
-    pub const KEY_TYPE: KeyTypeId = key_types::REPORTING;
-    //pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b"fish");
+    //pub const KEY_TYPE: KeyTypeId = key_types::REPORTING;
+    pub const KEY_TYPE: KeyTypeId = KeyTypeId(*b"fish");
     mod app {
         use sp_application_crypto::{app_crypto, sr25519};
 

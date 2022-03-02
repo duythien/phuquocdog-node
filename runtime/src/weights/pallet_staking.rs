@@ -349,10 +349,10 @@ impl<T: frame_system::Config> pallet_staking::WeightInfo for WeightInfo<T> {
 	// Storage: Staking ChillThreshold (r:0 w:1)
 	// Storage: Staking MaxNominatorsCount (r:0 w:1)
 	// Storage: Staking MinNominatorBond (r:0 w:1)
-	fn set_staking_limits() -> Weight {
-		(8_364_000 as Weight)
-			.saturating_add(T::DbWeight::get().writes(5 as Weight))
-	}
+	// fn set_staking_limits() -> Weight {
+	// 	(8_364_000 as Weight)
+	// 		.saturating_add(T::DbWeight::get().writes(5 as Weight))
+	// }
 	// Storage: Staking Ledger (r:1 w:0)
 	// Storage: Staking ChillThreshold (r:1 w:0)
 	// Storage: Staking Nominators (r:1 w:0)

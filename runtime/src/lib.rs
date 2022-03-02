@@ -38,9 +38,8 @@ use frame_support::{
 };
 
 use frame_support::{PalletId, traits::InstanceFilter};
-use frame_support::traits::{OnUnbalanced, Everything};
+use frame_support::traits::{OnUnbalanced, Everything, EnsureOneOf};
 use frame_system::{
-    EnsureOneOf,
     EnsureRoot, limits::{BlockLength, BlockWeights}, RawOrigin,
 };
 #[cfg(any(feature = "std", test))]
@@ -267,35 +266,35 @@ impl Default for ProxyType {
     }
 }
 
-impl InstanceFilter<Call> for ProxyType {
-    fn filter(&self, c: &Call) -> bool {
-        match self {
-            ProxyType::Any => false,
-            ProxyType::NonTransfer => !matches!(
-                c,
-                Call::Balances(..)
-                    | Call::Indices(pallet_indices::Call::transfer(..))
-            ),
-            ProxyType::Governance => matches!(
-                c,
-                Call::Council(..)
-                    | Call::TechnicalCommittee(..)
-                    | Call::Elections(..)
-                    | Call::Treasury(..)
-            ),
-            ProxyType::Staking => matches!(c, Call::Staking(..)),
-        }
-    }
-    fn is_superset(&self, o: &Self) -> bool {
-        match (self, o) {
-            (x, y) if x == y => true,
-            (ProxyType::Any, _) => true,
-            (_, ProxyType::Any) => false,
-            (ProxyType::NonTransfer, _) => true,
-            _ => false,
-        }
-    }
-}
+// impl InstanceFilter<Call> for ProxyType {
+//     fn filter(&self, c: &Call) -> bool {
+//         match self {
+//             ProxyType::Any => false,
+//             ProxyType::NonTransfer => !matches!(
+//                 c,
+//                 Call::Balances(..)
+//                     | Call::Indices(pallet_indices::Call::transfer(..))
+//             ),
+//             ProxyType::Governance => matches!(
+//                 c,
+//                 Call::Council(..)
+//                     | Call::TechnicalCommittee(..)
+//                     | Call::Elections(..)
+//                     | Call::Treasury(..)
+//             ),
+//             ProxyType::Staking => matches!(c, Call::Staking(..)),
+//         }
+//     }
+//     fn is_superset(&self, o: &Self) -> bool {
+//         match (self, o) {
+//             (x, y) if x == y => true,
+//             (ProxyType::Any, _) => true,
+//             (_, ProxyType::Any) => false,
+//             (ProxyType::NonTransfer, _) => true,
+//             _ => false,
+//         }
+//     }
+// }
 
 impl pallet_proxy::Config for Runtime {
     type Event = Event;
@@ -466,7 +465,6 @@ impl pallet_session::Config for Runtime {
     type SessionManager = pallet_session::historical::NoteHistoricalRoot<Self, Staking>;
     type SessionHandler = <SessionKeys as OpaqueKeys>::KeyTypeIdProviders;
     type Keys = SessionKeys;
-    type DisabledValidatorsThreshold = DisabledValidatorsThreshold;
     type WeightInfo = weights::pallet_session::WeightInfo;
 }
 
@@ -491,10 +489,11 @@ parameter_types! {
     // Six session in a an era (24 hrs)
     pub const SessionsPerEra: sp_staking::SessionIndex = 6;
     // 28 era for unbonding (28 days)
-    pub const BondingDuration: pallet_staking::EraIndex = 28;
-    pub const SlashDeferDuration: pallet_staking::EraIndex = 27;
+    pub const BondingDuration: sp_staking::EraIndex = 28;
+    pub const SlashDeferDuration: sp_staking::EraIndex = 27;
     pub const RewardCurve: &'static PiecewiseLinear<'static> = &REWARD_CURVE;
     pub const MaxNominatorRewardedPerValidator: u32 = 256;
+    pub const GenesisElectionProvider: T = frame_election_provider_support::onchain::OnChainSequentialPhragmen;
 }
 
 impl pallet_staking::Config for Runtime {
@@ -502,9 +501,12 @@ impl pallet_staking::Config for Runtime {
     type UnixTime = Timestamp;
     type CurrencyToVote = U128CurrencyToVote;
     type ElectionProvider = ElectionProviderMultiPhase;
-    type GenesisElectionProvider = frame_election_provider_support::onchain::OnChainSequentialPhragmen<
-        pallet_election_provider_multi_phase::OnChainConfig<Self>>;
-    const MAX_NOMINATIONS: u32 = MAX_NOMINATIONS;
+    type GenesisElectionProvider: frame_election_provider_support::ElectionProvider<
+            AccountId = Self::AccountId,
+            BlockNumber = Self::BlockNumber,
+            DataProvider = Pallet<Self>,
+        >;
+    
     type RewardRemainder = Treasury;
     type Event = Event;
     type Slash = Treasury;
@@ -514,7 +516,6 @@ impl pallet_staking::Config for Runtime {
     type SlashDeferDuration = SlashDeferDuration;
     /// A super-majority of the council can cancel the slash.
     type SlashCancelOrigin = EnsureOneOf<
-        AccountId,
         EnsureRoot<AccountId>,
         pallet_collective::EnsureProportionAtLeast<_3, _4, AccountId, CouncilCollective>,
     >;
@@ -538,10 +539,8 @@ parameter_types! {
 	pub const SignedDepositByte: Balance = deposit(0, 10) / 1024;
 	// Each good submission will get 1 DOT as reward
 	pub SignedRewardBase: Balance = UNITS;
-	// fallback: emergency phase.
-	pub const Fallback: pallet_election_provider_multi_phase::FallbackStrategy =
-		pallet_election_provider_multi_phase::FallbackStrategy::OnChain;
-	pub SolutionImprovementThreshold: Perbill = Perbill::from_rational(5u32, 10_000);
+    
+    pub SolutionImprovementThreshold: Perbill = Perbill::from_rational(5u32, 10_000);
 
 	// miner configs
 	pub const MinerMaxIterations: u32 = 10;
@@ -595,17 +594,14 @@ impl pallet_election_provider_multi_phase::Config for Runtime {
     type SlashHandler = (); // burn slashes
     type RewardHandler = (); // nothing to do upon rewards
     type SolutionImprovementThreshold = SolutionImprovementThreshold;
-    type MinerMaxIterations = MinerMaxIterations;
     type MinerMaxWeight = OffchainSolutionWeightLimit;
     type MinerMaxLength = OffchainSolutionLengthLimit;
     type OffchainRepeat = OffchainRepeat;
     type MinerTxPriority = NposSolutionPriority;
     type DataProvider = Staking;
-    type OnChainAccuracy = Perbill;
-    type Fallback = Fallback;
+    type Fallback = pallet_election_provider_multi_phase::NoFallback<Self>;
     type BenchmarkingConfig = ();
     type ForceOrigin = EnsureOneOf<
-        AccountId,
         EnsureRoot<AccountId>,
         pallet_collective::EnsureProportionAtLeast<_2, _3, AccountId, CouncilCollective>,
     >;
@@ -685,7 +681,6 @@ impl pallet_collective::Config<TechnicalCollective> for Runtime {
 }
 
 type EnsureRootOrHalfCouncil = EnsureOneOf<
-    AccountId,
     EnsureRoot<AccountId>,
     pallet_collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilCollective>,
 >;
@@ -726,7 +721,6 @@ impl pallet_treasury::Config for Runtime {
     type PalletId = TreasuryPalletId;
     type Currency = Balances;
     type ApproveOrigin = EnsureOneOf<
-        AccountId,
         EnsureRoot<AccountId>,
         pallet_collective::EnsureProportionAtLeast<_3, _5, AccountId, CouncilCollective>,
     >;
@@ -996,7 +990,8 @@ construct_runtime!(
     }
 );
 /// Digest item type.
-pub type DigestItem = generic::DigestItem<Hash>;
+//pub type DigestItem = generic::DigestItem<Hash>;
+pub type DigestItem = sp_runtime::DigestItem;
 /// The address format for describing accounts.
 pub type Address = sp_runtime::MultiAddress<AccountId, AccountIndex>;
 /// Block header type as expected by this runtime.
@@ -1033,7 +1028,7 @@ pub type Executive = frame_executive::Executive<
     Block,
     frame_system::ChainContext<Runtime>,
     Runtime,
-    AllPallets,
+    AllPalletsWithSystem,
     (),
 >;
 

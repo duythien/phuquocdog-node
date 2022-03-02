@@ -18,79 +18,83 @@ structopt = { version = "0.3.8", optional = true }
 
 [dependencies]
 # third-party dependencies
-jsonrpc-core = "18.0.0"
-codec = { package = "parity-scale-codec", version = "2.2.0" }
-serde = { version = "1.0.102", features = ["derive"] }
-futures = { version = "0.3.9", features = ["compat"] }
-hex-literal = "0.3.1"
-log = "0.4.8"
-rand = "0.7.2"
-structopt = { version = "0.3.8" }
-parking_lot = "0.11.1"
-itertools = "0.10.1"
+bitvec = { version = "0.20.1", default-features = false, features = ["alloc"] }
+parity-scale-codec = { version = "2.3.1", default-features = false, features = ["derive", "max-encoded-len"] }
+scale-info = { version = "1.0", default-features = false, features = ["derive"] }
+log = { version = "0.4.14", default-features = false }
+rustc-hex = { version = "2.1.0", default-features = false }
+serde = { version = "1.0.130", default-features = false }
+serde_derive = { version = "1.0.117", optional = true }
+static_assertions = "1.1.0"
+smallvec = "1.6.1"
+
 # local dependencies
 phuquocdog-runtime = { path = '../runtime', version = '3.0.0' }
 
 # Substrate dependencies
-frame-benchmarking = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-frame-support = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-frame-benchmarking-cli = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-pallet-im-online = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-pallet-staking = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-pallet-transaction-payment-rpc = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-pallet-contracts = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-pallet-contracts-rpc = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-basic-authorship = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-client-api = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-chain-spec = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-consensus = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-sync-state-rpc = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-consensus-slots = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-consensus-uncles = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-authority-discovery = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-consensus-babe = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-consensus-babe-rpc = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-consensus-epochs = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-grandpa = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" ,package="sc-finality-grandpa"}
-sc-finality-grandpa-rpc = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-keystore = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-network = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-rpc = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-rpc-api = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-transaction-pool = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-api = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-authorship = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-block-builder = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-blockchain = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-consensus = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-consensus-babe = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-core = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-keystore = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-grandpa-primitives = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" , package="sp-finality-grandpa"}
-sp-inherents = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-timestamp = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-runtime = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-telemetry = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-transaction-pool = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-substrate-frame-rpc-system = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-service-test = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-keyring = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-frame-system = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-pallet-transaction-payment = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-transaction-pool-api = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sp-authority-discovery = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
+frame-benchmarking = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+frame-support = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+frame-benchmarking-cli = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+pallet-im-online = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+pallet-staking = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+pallet-transaction-payment-rpc = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+pallet-contracts = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+pallet-contracts-rpc = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-basic-authorship = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-client-api = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-chain-spec = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-consensus = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-sync-state-rpc = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-consensus-slots = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-consensus-uncles = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-authority-discovery = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-consensus-babe = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-consensus-babe-rpc = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-consensus-epochs = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+grandpa = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' ,package="sc-finality-grandpa"}
+sc-finality-grandpa-rpc = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-keystore = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-network = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-rpc = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-rpc-api = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-transaction-pool = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-api = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-authorship = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-block-builder = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-blockchain = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-consensus = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-consensus-babe = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-core = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-keystore = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+grandpa-primitives = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' , package="sp-finality-grandpa"}
+sp-inherents = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-timestamp = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-runtime = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-telemetry = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-transaction-pool = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+substrate-frame-rpc-system = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-service-test = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-keyring = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+frame-system = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+pallet-transaction-payment = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-transaction-pool-api = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sp-authority-discovery = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
 
 #Primitives
 phuquocdog-primitives = { path = "../primitives", default-features = false }
-sc-executor = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
+sc-executor = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
 
 
-sc-cli = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82", features = ["wasmtime"] }
-node-executor = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82", features = ["wasmtime"] }
-sc-service = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82", features = ["wasmtime"]}
-sp-trie = { git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82", default-features= false, features = [
+sc-cli = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17', features = ["wasmtime"] }
+node-executor = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17', features = ["wasmtime"] }
+sc-service = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17', features = ["wasmtime"]}
+sp-trie = { git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17', default-features= false, features = [
 	"memory-tracker",
 ] }
+
+pin-project = "1.0.8"
+pin-project-internal ="1.0.8"
+sp-arithmetic = "4.0.0"
 
 
 [dev-dependencies]
@@ -98,15 +102,17 @@ futures = "0.3.9"
 tempfile = "3.1.0"
 assert_cmd = "1.0"
 nix = "0.19"
-serde_json = "1.0"
+serde_json = "1.0.79"
+libp2p-core = "0.30.0"
+
 regex = "1"
 platforms = "1.1"
 async-std = { version = "1.6.5", features = ["attributes"] }
 soketto = "0.4.2"
-sc-keystore =  {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-consensus = {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-consensus-babe =  {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
-sc-consensus-epochs =  {  git = "https://github.com/paritytech/substrate.git", rev="88c64e06471cc12aa9b25290f24d5566bcb5dd82" }
+sc-keystore =  {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-consensus = {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-consensus-babe =  {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
+sc-consensus-epochs =  {  git = "https://github.com/paritytech/substrate.git", branch = 'polkadot-v0.9.17' }
 
 
 [features]
