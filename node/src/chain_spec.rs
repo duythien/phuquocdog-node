@@ -1,10 +1,10 @@
 use phuquocdog_runtime::{
-    currency::{OCTS, UNITS as PHUQUOCDOG},
     opaque::Block, opaque::SessionKeys, AccountId, BabeConfig, Balance, BalancesConfig,
     GenesisConfig, GrandpaConfig, ImOnlineConfig, OctopusAppchainConfig, OctopusLposConfig,
     SessionConfig, Signature, SudoConfig, SystemConfig, WASM_BINARY,
 
 };
+use phuquocdog_runtime::constants::currency::{OCTS, UNITS as PHUQUOCDOG};
 use beefy_primitives::crypto::AuthorityId as BeefyId;
 use pallet_im_online::sr25519::AuthorityId as ImOnlineId;
 use pallet_octopus_appchain::AuthorityId as OctopusId;
@@ -142,7 +142,7 @@ pub fn development_config() -> Result<ChainSpec, String> {
 
 pub fn local_testnet_config() -> Result<ChainSpec, String> {
     let wasm_binary = WASM_BINARY.ok_or_else(|| "Development wasm not available".to_string())?;
-    let properties = starship_properties();
+    let properties = phuquocdog_properties();
     Ok(ChainSpec::from_genesis(
         // Name
         "Local Testnet Phu Quoc Dog",
@@ -211,7 +211,7 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
 
 pub fn quark_config() -> Result<ChainSpec, String> {
     let wasm_binary = WASM_BINARY.ok_or_else(|| "Development wasm not available".to_string())?;
-    let properties = starship_properties();
+    let properties = phuquocdog_properties();
     Ok(ChainSpec::from_genesis(
         // Name
         "Quark Phu Quoc Dog",
@@ -396,7 +396,7 @@ pub fn testnet_config() -> Result<ChainSpec, String> {
 }
 
 /// Helper function to generate an properties
-pub fn starship_properties() -> Properties {
+pub fn phuquocdog_properties() -> Properties {
     let mut properties = Properties::new();
     //properties.insert("ss58Format".into(), 90.into());
     properties.insert("ss58Format".into(), 42.into());

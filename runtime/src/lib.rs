@@ -79,9 +79,12 @@ use sp_runtime::{
     FixedPointNumber, Perquintill,
 };
 use static_assertions::const_assert;
+use constants::{currency::*};
 
 /// Import the template pallet.
 pub use pallet_template;
+/// Constant values used within the runtime.
+pub mod constants;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -150,24 +153,6 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     transaction_version: 1,
 };
 
-/// The native token, uses 18 decimals of precision.
-pub mod currency {
-    use super::Balance;
-
-    pub const OCTS: Balance = 10_000_000_000;
-
-    pub const UNITS: Balance = 10_000_000_000;
-    pub const DOLLARS: Balance = UNITS;
-    pub const CENTS: Balance = DOLLARS / 100;
-    pub const MILLICENTS: Balance = CENTS / 1_000;
-
-    pub const EXISTENSIAL_DEPOSIT: Balance = CENTS;
-    pub const BYTE_FEE: Balance = 10 * MILLICENTS;
-
-    pub const fn deposit(items: u32, bytes: u32) -> Balance {
-        (items as Balance) * CENTS + (bytes as Balance) * BYTE_FEE
-    }
-}
 
 /// Since BABE is probabilistic this is the average expected block time that
 /// we are targeting. Blocks will be produced at a minimum duration defined
@@ -381,7 +366,7 @@ impl pallet_timestamp::Config for Runtime {
 }
 
 parameter_types! {
-    pub const ExistentialDeposit: Balance = currency::EXISTENSIAL_DEPOSIT;
+    pub const ExistentialDeposit: Balance = EXISTENSIAL_DEPOSIT;
     // For weight estimation, we assume that the most locks on an individual account will be 50.
     // This number may need to be adjusted in the future if this assumption no longer holds true.
     pub const MaxLocks: u32 = 50;
@@ -403,7 +388,7 @@ impl pallet_balances::Config for Runtime {
 }
 
 parameter_types! {
-    pub const TransactionByteFee: Balance = currency::BYTE_FEE;
+    pub const TransactionByteFee: Balance = BYTE_FEE;
     pub const OperationalFeeMultiplier: u8 = 5;
     pub const TargetBlockFullness: Perquintill = Perquintill::from_percent(25);
     pub AdjustmentVariable: Multiplier = Multiplier::saturating_from_rational(1, 100_000);
