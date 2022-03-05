@@ -82,3 +82,5 @@ Build customSpecRaw:
 ./target/release/phuquocdog-node build-spec --chain=customSpec.json --raw --disable-default-bootnode > customSpecRaw.json
 ```
 
+./target/release/phuquocdog-node benchmark --chain=dev --execution=wasm --wasm-execution=compiled --pallet=pallet_currency --extrinsic=*  --steps=20 --repeat=10 --heap-pages=4096  --raw --template=./.maintain/pallet-weight-template.hbs --output=./pallets/currency/src/weights.rs
+

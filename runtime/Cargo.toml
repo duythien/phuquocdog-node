@@ -12,6 +12,7 @@ repository = "https://github.com/phuquocdog/node"
 [features]
 default = ['std']
 runtime-benchmarks = [
+    'frame-benchmarking',
     'frame-benchmarking/runtime-benchmarks',
     'frame-support/runtime-benchmarks',
     'frame-system-benchmarking',
@@ -21,6 +22,9 @@ runtime-benchmarks = [
     'pallet-template/runtime-benchmarks',
     'pallet-timestamp/runtime-benchmarks',
     'sp-runtime/runtime-benchmarks',
+
+    #Local pallet
+    'pallet-currency/runtime-benchmarks',
 ]
 std = [
     'codec/std',
@@ -63,6 +67,8 @@ std = [
     'pallet-octopus-appchain/std',
     'pallet-octopus-lpos/std',
     'pallet-octopus-upward-messages/std',
+    # Local Pallet
+    'pallet-currency/std',
 ]
 
 [build-dependencies]
@@ -80,6 +86,7 @@ pallet-template = { path = '../pallets/template', version = '3.0.0', default-fea
 
 # Local Dependecies
 phuquocdog-primitives = { path = "../primitives", default-features = false }
+pallet-currency = { path = '../pallets/currency', default-features = false }
 
 frame-benchmarking = { git = 'https://github.com/paritytech/substrate.git', branch = 'polkadot-v0.9.13', default-features = false, optional = true }
 frame-system-benchmarking = { git = 'https://github.com/paritytech/substrate.git', branch = 'polkadot-v0.9.13', default-features = false, optional = true }
