@@ -666,8 +666,12 @@ impl pallet_sudo::Config for Runtime {
     type Call = Call;
 }
 
+// Local pallets
 /// Configure the pallet-template in pallets/template.
 impl pallet_template::Config for Runtime {
+    type Event = Event;
+}
+impl pallet_currency::Config for Runtime {
     type Event = Event;
 }
 
@@ -699,6 +703,8 @@ construct_runtime!(
         Sudo: pallet_sudo,
         // Include the custom logic from the pallet-template in the runtime.
         TemplateModule: pallet_template,
+        Currency: pallet_currency,
+
     }
 );
 
@@ -1008,6 +1014,8 @@ impl_runtime_apis! {
             add_benchmark!(params, batches, pallet_balances, Balances);
             add_benchmark!(params, batches, pallet_timestamp, Timestamp);
             add_benchmark!(params, batches, pallet_template, TemplateModule);
+            add_benchmark!(params, batches, pallet_currency, Currency);
+
             if batches.is_empty() { return Err("Benchmark not found for this pallet.".into()) }
             Ok(batches)
         }

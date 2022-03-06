@@ -150,5 +150,45 @@ pub mod pallet {
 
 			Ok(())
 		}
+
+		/// Transfer tokens from one account to another
+		//#[pallet::weight(T::WeightInfo::transfer(currency_id.len() as u32 ))]
+		#[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
+		pub fn transfer(
+			origin: OriginFor<T>,
+			to: T::AccountId,
+			currency_id: CurrencyId,
+			amount: u128,
+		) -> DispatchResult {
+			let who = ensure_signed(origin)?;
+			let currency = Self::currency(currency_id.clone());
+
+			ensure!(currency.is_some(), Error::<T>::CurrencyNotExist);
+			ensure!(who != to, Error::<T>::BadOrigin);
+			ensure!(amount > 0, Error::<T>::InsufficientAmount);
+
+			let sender_balance =
+				Self::accounts(&who, &currency_id).unwrap_or(CurrencyBalance { free: 0 });
+			let receiver_balance =
+				Self::accounts(&to, &currency_id).unwrap_or(CurrencyBalance { free: 0 });
+
+			// Calculate new balances
+			let updated_from_balance =
+				sender_balance.free.checked_sub(amount).ok_or(Error::<T>::InsufficientFunds)?;
+			let updated_to_balance =
+				receiver_balance.free.checked_add(amount).ok_or(Error::<T>::OverflowAmount)?;
+
+			// Write new balances to storage
+			Accounts::<T>::insert(
+				&who,
+				&currency_id,
+				CurrencyBalance { free: updated_from_balance },
+			);
+			Accounts::<T>::insert(&to, &currency_id, CurrencyBalance { free: updated_to_balance });
+
+			Self::deposit_event(Event::Transferred(currency_id, amount, to, who));
+
+			Ok(())
+		}
 	}
 }
