@@ -304,7 +304,7 @@ pub fn quark_config() -> Result<ChainSpec, String> {
                 // Appchain config
                 appchain_config(
                     // Relay Contract
-                    "",
+                    "phuquocdog.registry.test_oct.testnet",
                     // Asset Id by Name
                     "usdc.testnet",
                     // Premined Amount

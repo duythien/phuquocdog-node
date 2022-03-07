@@ -35,6 +35,7 @@ without launching it:
 
 ```sh
 cargo build --release
+// cargo build --release --features=runtime-benchmarks
 ```
 
 ## Run
