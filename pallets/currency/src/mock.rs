@@ -1,4 +1,4 @@
-use crate as pallet_template;
+use crate as pallet_currency;
 use frame_support::parameter_types;
 use frame_system as system;
 use sp_core::H256;
@@ -6,6 +6,7 @@ use sp_runtime::{
 	testing::Header,
 	traits::{BlakeTwo256, IdentityLookup},
 };
+use sp_io::TestExternalities;
 
 type UncheckedExtrinsic = frame_system::mocking::MockUncheckedExtrinsic<Test>;
 type Block = frame_system::mocking::MockBlock<Test>;
@@ -18,7 +19,8 @@ frame_support::construct_runtime!(
 		UncheckedExtrinsic = UncheckedExtrinsic,
 	{
 		System: frame_system::{Pallet, Call, Config, Storage, Event<T>},
-		TemplateModule: pallet_template::{Pallet, Call, Storage, Event<T>},
+		// TemplateModule: pallet_currency::{Pallet, Call, Storage, Event<T>},
+		Currencies: pallet_currency::{Pallet, Call, Storage, Event<T>},
 	}
 );
 
@@ -53,11 +55,18 @@ impl system::Config for Test {
 	type OnSetCode = ();
 }
 
-impl pallet_template::Config for Test {
+impl pallet_currency::Config for Test {
 	type Event = Event;
 }
 
 // Build genesis storage according to the mock runtime.
 pub fn new_test_ext() -> sp_io::TestExternalities {
 	system::GenesisConfig::default().build_storage::<Test>().unwrap().into()
+}
+pub struct ExternalityBuilder;
+impl ExternalityBuilder {
+	pub fn build() -> TestExternalities {
+		let storage = system::GenesisConfig::default().build_storage::<Test>().unwrap();
+		TestExternalities::from(storage)
+	}
 }

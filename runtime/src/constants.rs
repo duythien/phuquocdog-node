@@ -17,20 +17,23 @@
 
 //! A set of constant values used in substrate runtime.
 
-/// Money matters.
+/// The native token, uses 18 decimals of precision.
 pub mod currency {
-	use phuquocdog_primitives::Balance;
+    use phuquocdog_primitives::Balance;
 
-    pub const PQD: Balance = 10_000_000_000;
-    pub const UNITS: Balance = PQD;
-    pub const DOLLARS: Balance = PQD;
-    pub const CENTS: Balance = DOLLARS / 100; 
+    pub const OCTS: Balance = 10_000_000_000;
+
+    pub const UNITS: Balance = 10_000_000_000;
+    pub const DOLLARS: Balance = UNITS;
+    pub const CENTS: Balance = DOLLARS / 100;
     pub const MILLICENTS: Balance = CENTS / 1_000;
 
-    pub const fn deposit(items: u32, bytes: u32) -> Balance {
-        items as Balance * 15 * CENTS + (bytes as Balance) * 6 * CENTS
-    }
+    pub const EXISTENSIAL_DEPOSIT: Balance = CENTS;
+    pub const BYTE_FEE: Balance = 10 * MILLICENTS;
 
+    pub const fn deposit(items: u32, bytes: u32) -> Balance {
+        (items as Balance) * CENTS + (bytes as Balance) * BYTE_FEE
+    }
 }
 
 /// Time.

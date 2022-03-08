@@ -4,7 +4,7 @@ description = 'FRAME pallet template for defining custom runtime logic.'
 edition = '2018'
 homepage = 'https://phuquoc.dog'
 license = 'Unlicense'
-name = 'pallet-template'
+name = 'pallet-currency'
 readme = 'README.md'
 repository = 'https://github.com/phuquocdog/node/'
 version = '3.0.0'
@@ -24,16 +24,15 @@ scale-info = { version = '1.0', default-features = false, features = ['derive'] 
 frame-benchmarking = { git = 'https://github.com/paritytech/substrate.git', branch = 'polkadot-v0.9.13', default-features = false, optional = true }
 frame-support = { git = 'https://github.com/paritytech/substrate.git', branch = 'polkadot-v0.9.13', default-features = false }
 frame-system = { git = 'https://github.com/paritytech/substrate.git', branch = 'polkadot-v0.9.13', default-features = false }
-
+sp-std = { git = 'https://github.com/paritytech/substrate', branch = 'polkadot-v0.9.13', default-features = false }
 
 
 [features]
 default = ['std']
-runtime-benchmarks = [
-    'frame-benchmarking/runtime-benchmarks'
-]
+runtime-benchmarks = ['frame-benchmarking']
 std = [
     'codec/std',
+    'sp-std/std',
     'scale-info/std',
     'frame-support/std',
     'frame-system/std',
