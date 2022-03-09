@@ -50,6 +50,7 @@ use sp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
 use sp_consensus::SelectChain;
 use sp_consensus_babe::BabeApi;
 use sp_keystore::SyncCryptoStorePtr;
+use pallet_contracts_rpc::{Contracts, ContractsApi};
 
 /// Extra dependencies for BABE.
 pub struct BabeDeps {
@@ -120,6 +121,7 @@ where
 		+ 'static,
 	C::Api: substrate_frame_rpc_system::AccountNonceApi<Block, AccountId, Index>,
 	C::Api: pallet_mmr_rpc::MmrRuntimeApi<Block, <Block as sp_runtime::traits::Block>::Hash>,
+	C::Api: pallet_contracts_rpc::ContractsRuntimeApi<Block, AccountId, Balance, BlockNumber, Hash>,
 	C::Api: pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
 	C::Api: BabeApi<Block>,
 	C::Api: BlockBuilder<Block>,
@@ -182,6 +184,11 @@ where
 			beefy.beefy_commitment_stream,
 			beefy.subscription_executor,
 		),
+	));
+
+	// Contracts RPC API extension
+	io.extend_with(ContractsApi::to_delegate(
+		Contracts::new(client.clone())
 	));
 
 	Ok(io)

@@ -63,6 +63,7 @@ pub use sp_runtime::{Perbill, Permill};
 
 use beefy_primitives::{crypto::AuthorityId as BeefyId, mmr::MmrLeafVersion};
 use codec::Encode;
+use codec::Codec;
 use frame_support::{weights::DispatchClass, PalletId};
 use frame_system::{
     limits::{BlockLength, BlockWeights},
@@ -80,6 +81,10 @@ use sp_runtime::{
 };
 use static_assertions::const_assert;
 use constants::{currency::*};
+
+use pallet_contracts_primitives::{
+    Code, ContractExecResult, ContractInstantiateResult, GetStorageResult,
+};
 
 /// Import the template pallet.
 pub use pallet_template;
@@ -674,7 +679,83 @@ impl pallet_template::Config for Runtime {
 impl pallet_currency::Config for Runtime {
     type Event = Event;
 }
+impl pallet_randomness_collective_flip::Config for Runtime {}
 
+parameter_types! {
+    pub const DepositPerItem: Balance = deposit(1, 0);
+    pub const DepositPerByte: Balance = deposit(0, 1);
+    // The lazy deletion runs inside on_initialize.
+    pub DeletionWeightLimit: Weight = AVERAGE_ON_INITIALIZE_RATIO *
+        RuntimeBlockWeights::get().max_block;
+    // The weight needed for decoding the queue should be less or equal than a fifth
+    // of the overall weight dedicated to the lazy deletion.
+    pub DeletionQueueDepth: u32 = ((DeletionWeightLimit::get() / (
+            <Runtime as pallet_contracts::Config>::WeightInfo::on_initialize_per_queue_item(1) -
+            <Runtime as pallet_contracts::Config>::WeightInfo::on_initialize_per_queue_item(0)
+        )) / 5) as u32;
+    pub Schedule: pallet_contracts::Schedule<Runtime> = {
+        let mut schedule = pallet_contracts::Schedule::<Runtime>::default();
+        // We decided to **temporarily* increase the default allowed contract size here
+        // (the default is `128 * 1024`).
+        //
+        // Our reasoning is that a number of people ran into `CodeTooLarge` when trying
+        // to deploy their contracts. We are currently introducing a number of optimizations
+        // into ink! which should bring the contract sizes lower. In the meantime we don't
+        // want to pose additional friction on developers.
+        schedule.limits.code_len = 256 * 1024;
+        schedule
+    };
+}
+impl pallet_contracts::Config for Runtime {
+    type Time = Timestamp;
+    type Randomness = RandomnessCollectiveFlip;
+    type Currency = Balances;
+    type Event = Event;
+    type Call = Call;
+}
+impl pallet_contracts_rpc::ContractsApi<Block,AccountId, Balance, BlockNumber, Hash>
+        for Runtime
+    {
+       fn call(
+            origin: AccountId,
+            dest: AccountId,
+            value: Balance,
+            gas_limit: u64,
+            storage_deposit_limit: Option<Balance>,
+            input_data: Vec<u8>,
+        ) -> pallet_contracts_primitives::ContractExecResult<Balance> {
+            Contracts::bare_call(origin, dest, value, gas_limit, storage_deposit_limit, input_data, CONTRACTS_DEBUG_OUTPUT)
+        }
+
+        fn instantiate(
+            origin: AccountId,
+            value: Balance,
+            gas_limit: u64,
+            storage_deposit_limit: Option<Balance>,
+            code: pallet_contracts_primitives::Code<Hash>,
+            data: Vec<u8>,
+            salt: Vec<u8>,
+        ) -> pallet_contracts_primitives::ContractInstantiateResult<AccountId, Balance>
+        {
+            Contracts::bare_instantiate(origin, value, gas_limit, storage_deposit_limit, code, data, salt, CONTRACTS_DEBUG_OUTPUT)
+        }
+
+        fn upload_code(
+            origin: AccountId,
+            code: Vec<u8>,
+            storage_deposit_limit: Option<Balance>,
+        ) -> pallet_contracts_primitives::CodeUploadResult<Hash, Balance>
+        {
+            Contracts::bare_upload_code(origin, code, storage_deposit_limit)
+        }
+
+        fn get_storage(
+            address: AccountId,
+            key: [u8; 32],
+        ) -> pallet_contracts_primitives::GetStorageResult {
+            Contracts::get_storage(address, key)
+        }
+    }
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
     pub enum Runtime where
@@ -684,6 +765,7 @@ construct_runtime!(
     {
         System: frame_system,
         Babe: pallet_babe,
+        RandomnessCollectiveFlip: pallet_randomness_collective_flip,
         Timestamp: pallet_timestamp,
         Authorship: pallet_authorship,
         Balances: pallet_balances,
@@ -704,7 +786,7 @@ construct_runtime!(
         // Include the custom logic from the pallet-template in the runtime.
         TemplateModule: pallet_template,
         Currency: pallet_currency,
-
+        Contracts: pallet_contracts,
     }
 );
 
