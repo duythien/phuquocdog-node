@@ -120,6 +120,7 @@ where
 		+ 'static,
 	C::Api: substrate_frame_rpc_system::AccountNonceApi<Block, AccountId, Index>,
 	C::Api: pallet_mmr_rpc::MmrRuntimeApi<Block, <Block as sp_runtime::traits::Block>::Hash>,
+	C::Api: pallet_contracts_rpc::ContractsRuntimeApi<Block, AccountId, Balance, BlockNumber, Hash>,
 	C::Api: pallet_transaction_payment_rpc::TransactionPaymentRuntimeApi<Block, Balance>,
 	C::Api: BabeApi<Block>,
 	C::Api: BlockBuilder<Block>,
@@ -131,6 +132,8 @@ where
 	use pallet_mmr_rpc::{Mmr, MmrApi};
 	use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApi};
 	use substrate_frame_rpc_system::{FullSystem, SystemApi};
+	use pallet_contracts_rpc::{Contracts, ContractsApi};
+
 
 	let mut io = jsonrpc_core::IoHandler::default();
 	let FullDeps { client, pool, select_chain, chain_spec, deny_unsafe, babe, grandpa, beefy } =
@@ -144,6 +147,7 @@ where
 		subscription_executor,
 		finality_provider,
 	} = grandpa;
+
 
 	io.extend_with(SystemApi::to_delegate(FullSystem::new(client.clone(), pool, deny_unsafe)));
 	// Making synchronous calls in light client freezes the browser currently,
@@ -167,6 +171,9 @@ where
 		finality_provider,
 	)));
 
+	// Contracts RPC API extension
+	io.extend_with(ContractsApi::to_delegate(Contracts::new(client.clone())));
+
 	io.extend_with(sc_sync_state_rpc::SyncStateRpcApi::to_delegate(
 		sc_sync_state_rpc::SyncStateRpcHandler::new(
 			chain_spec,
@@ -183,6 +190,7 @@ where
 			beefy.subscription_executor,
 		),
 	));
+
 
 	Ok(io)
 }

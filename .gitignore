@@ -16,6 +16,7 @@
 .direnv
 
 customSpec.json
+customSpec-Mainnet.json
 
 .key
 data/

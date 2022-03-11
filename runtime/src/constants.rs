@@ -81,3 +81,7 @@ pub mod time {
     pub const HOURS: BlockNumber = MINUTES * 60;
     pub const DAYS: BlockNumber = HOURS * 24;
 }
+
+pub mod contract {
+	pub const CONTRACTS_DEBUG_OUTPUT: bool = true;
+}
