@@ -16,7 +16,7 @@
 .direnv
 
 customSpec.json
-customSpec-Mainnet.json
+phuquocdog-json
 
 .key
 data/

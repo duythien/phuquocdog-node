@@ -69,19 +69,3 @@ RUST_LOG=debug RUST_BACKTRACE=1 ./target/release/phuquocdog-node -lruntime=debug
 Once the node template is running locally, you can connect it with **Polkadot-JS Apps** front-end
 to interact with your chain. [Click here](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9944) connecting the Apps to your local node template.
 
-
-### Note
-
-Build customSpecRaw: 
-
-```
-./target/release/phuquocdog-node build-spec --disable-default-bootnode --chain quark > customSpec.json
-
-```
-
-```
-./target/release/phuquocdog-node build-spec --chain=customSpec.json --raw --disable-default-bootnode > customSpecRaw.json
-```
-
-./target/release/phuquocdog-node benchmark --chain=dev --execution=wasm --wasm-execution=compiled --pallet=pallet_currency --extrinsic=*  --steps=20 --repeat=10 --heap-pages=4096  --raw --template=./.maintain/pallet-weight-template.hbs --output=./pallets/currency/src/weights.rs
-
