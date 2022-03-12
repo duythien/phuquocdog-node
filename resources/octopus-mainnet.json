@@ -3,7 +3,7 @@
   "id": "phuquocdog_mainnet",
   "chainType": "Live",
   "bootNodes": [
-    "/dns/p2p.phuquoc.dog/tcp/30340/p2p/12D3KooWEc9LZpacBXG48bVVjZNUaXaQHR4qoW74Xf9tmNw1Sk4P"
+    "/dns/p2p.phuquoc.dog/tcp/30333/p2p/12D3KooWEc9LZpacBXG48bVVjZNUaXaQHR4qoW74Xf9tmNw1Sk4P"
   ],
   "telemetryEndpoints": null,
   "protocolId": "phuquocdog",
