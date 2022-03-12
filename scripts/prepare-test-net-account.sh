@@ -18,7 +18,7 @@ generate_account_id() {
 }
 
 generate_address() {
-if [[ $2 == 'beefy' ]]; then
+	if [[ $2 == 'beefy' ]]; then
 		subkey inspect ${3:-} ${4:-} "$SECRET//$1//$2" | grep "Public key (SS58)" | awk '{ print $4 }'
 	else
 		subkey inspect ${3:-} ${4:-} "$SECRET//$1//$2" | grep "SS58 Address" | awk '{ print $3 }'
@@ -45,7 +45,7 @@ generate_address_and_account_id() {
 		INTO="into"
 	fi
 
-	printf "// $ADDRESS\nhex![\"${ACCOUNT#'0x'}\"].$INTO(),"
+	printf "\"$2\": \"$ADDRESS\","
 }
 
 V_NUM=$1
@@ -62,6 +62,6 @@ for i in $(seq 1 $V_NUM); do
 	AUTHORITIES+="$(generate_address_and_account_id $i octopus '--scheme sr25519' true)\n"
 	AUTHORITIES+="),\n"
 done
-
+#printf "$(generate_address_and_public_key)"
 printf "$AUTHORITIES"
 # printf "$SECRET"
