@@ -3,7 +3,8 @@
   "id": "phuquocdog_mainnet",
   "chainType": "Live",
   "bootNodes": [
-    "/dns/p2p.phuquoc.dog/tcp/30333/p2p/12D3KooWEc9LZpacBXG48bVVjZNUaXaQHR4qoW74Xf9tmNw1Sk4P"
+    "/dns/p2p.phuquoc.dog/tcp/30333/p2p/12D3KooWEW9QRzZy2CGwzjYHgPFH7T5NpCeBBdPHGWHF79y6jcns",
+    "/dns/p2p02.phuquoc.dog/tcp/30333/p2p/12D3KooWQdmQeFKvPEZFK6RbRD8tBtBZr9Cv5w3WxxS6T1bxMs7k"
   ],
   "telemetryEndpoints": null,
   "protocolId": "phuquocdog",
