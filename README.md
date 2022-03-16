@@ -1,18 +1,14 @@
 # Phu Quoc Dog Node
 
-Phu Quoc Dog is a Substrate-based Polkadot parachain. Phu Quoc Dog is committed to providing easy-to-use blockchain infrastructure and creating a one-stop comprehensive infrastructure platform, which aims to reduce the threshold and cost for developers, while bringing them great returns.
+Phu Quoc Dog is a Substrate-based Octopus network appchain. Phu Quoc Dog is committed to providing easy-to-use blockchain infrastructure and creating a one-stop comprehensive infrastructure platform, which aims to reduce the threshold and cost for developers, while bringing them great returns.
 
-PQD is the native token of the Polkadot network in a similar way that BTC is the native token of Bitcoin or Ether is the native token of the Ethereum blockchain.
+PQD is the native token of the Phu Quoc Dog network in a similar way that BTC is the native token of Bitcoin or Ether is the native token of the Ethereum blockchain.
 
 ## Getting Started
 
 Follow the steps below to get started with the Node Template, or get it up and running right from your browser
 in just a few clicks using [Playground](https://playground.substrate.dev/) :hammer_and_wrench:
 
-### Using Nix
-
-Install [nix](https://nixos.org/) and optionally [direnv](https://github.com/direnv/direnv) and [lorri](https://github.com/target/lorri) for a fully plug
-and play experience for setting up the development environment. To get all the correct dependencies activate direnv `direnv allow` and lorri `lorri shell`.
 
 ### Rust Setup
 
@@ -24,8 +20,7 @@ Use Rust's native `cargo` command to build and launch the template node:
 
 ```sh
 cargo run --release -- --dev --tmp
-
-// cargo +nightly run --release --features=runtime-benchmarks
+cargo run --release --features=runtime-benchmarks
 ```
 
 ### Build
@@ -35,7 +30,7 @@ without launching it:
 
 ```sh
 cargo build --release
-// cargo build --release --features=runtime-benchmarks
+cargo build --release --features=runtime-benchmarks
 ```
 
 ## Run
