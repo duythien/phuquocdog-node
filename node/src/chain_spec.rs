@@ -132,6 +132,7 @@ pub fn development_config() -> Result<ChainSpec, String> {
         None,
         // Protocol ID
         None,
+        None,
         // Properties
         None,
         // Extensions
@@ -202,6 +203,7 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
         None,
         // Protocol ID
         Some("phuquocdog-local-testnet"),
+        None,
         // Properties
         Some(properties),
         // Extensions
@@ -321,6 +323,7 @@ pub fn quark_config() -> Result<ChainSpec, String> {
         None,
         // Protocol ID
         Some("quark-phuquocdog"),
+        None,
         // Properties
         Some(properties),
         // Extensions
@@ -383,7 +386,7 @@ fn genesis(
         octopus_assets: Default::default(),
         sudo: SudoConfig {
             // Assign network admin rights.
-            key: root_key,
+            key: Some(root_key)
         },
     }
 }

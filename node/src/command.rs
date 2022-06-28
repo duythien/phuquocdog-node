@@ -1,21 +1,3 @@
-// This file is part of Substrate.
-
-// Copyright (C) 2017-2021 Parity Technologies (UK) Ltd.
-// SPDX-License-Identifier: GPL-3.0-or-later WITH Classpath-exception-2.0
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <https://www.gnu.org/licenses/>.
-
 use crate::{
 	chain_spec,
 	cli::{Cli, Subcommand},
@@ -128,6 +110,23 @@ pub fn run() -> sc_cli::Result<()> {
 				     `--features runtime-benchmarks`."
 					.into())
 			},
+		#[cfg(feature = "try-runtime")]
+		Some(Subcommand::TryRuntime(cmd)) => {
+			let runner = cli.create_runner(cmd)?;
+			runner.async_run(|config| {
+				// we don't need any of the components of new_partial, just a runtime, or a task
+				// manager to do `async_run`.
+				let registry = config.prometheus_config.as_ref().map(|cfg| &cfg.registry);
+				let task_manager =
+					sc_service::TaskManager::new(config.tokio_handle.clone(), registry)
+						.map_err(|e| sc_cli::Error::Service(sc_service::Error::Prometheus(e)))?;
+				Ok((cmd.run::<Block, service::ExecutorDispatch>(config), task_manager))
+			})
+		},
+		#[cfg(not(feature = "try-runtime"))]
+		Some(Subcommand::TryRuntime) => Err("TryRuntime wasn't enabled when building the node. \
+				You can enable it with `--features try-runtime`."
+			.into()),
 		None => {
 			let runner = cli.create_runner(&cli.run)?;
 			runner.run_node_until_exit(|config| async move {
@@ -136,4 +135,3 @@ pub fn run() -> sc_cli::Result<()> {
 		},
 	}
 }
-

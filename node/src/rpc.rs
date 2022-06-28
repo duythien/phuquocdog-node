@@ -28,8 +28,6 @@
 //! are part of it. Therefore all node-runtime-specific RPCs can
 //! be placed here or imported from corresponding FRAME RPC definitions.
 
-#![warn(missing_docs)]
-
 use std::sync::Arc;
 
 use phuquocdog_runtime::{opaque::Block, AccountId, Balance, BlockNumber, Hash, Index};
@@ -76,11 +74,15 @@ pub struct GrandpaDeps<B> {
 }
 
 /// Dependencies for BEEFY
+use beefy_gadget::notification::{BeefyBestBlockStream, BeefySignedCommitmentStream};
 pub struct BeefyDeps {
 	/// Receives notifications about signed commitment events from BEEFY.
-	pub beefy_commitment_stream: beefy_gadget::notification::BeefySignedCommitmentStream<Block>,
+	pub beefy_commitment_stream: BeefySignedCommitmentStream<Block>,
 	/// Executor to drive the subscription manager in the BEEFY RPC handler.
 	pub subscription_executor: sc_rpc::SubscriptionTaskExecutor,
+
+	/// Receives notifications about best block events from BEEFY.
+	pub beefy_best_block_stream: BeefyBestBlockStream<Block>,
 }
 
 /// Full client dependencies
@@ -180,17 +182,15 @@ where
 			client,
 			shared_authority_set,
 			shared_epoch_changes,
-			deny_unsafe,
 		)?,
 	));
 
-	io.extend_with(beefy_gadget_rpc::BeefyApi::to_delegate(
-		beefy_gadget_rpc::BeefyRpcHandler::new(
-			beefy.beefy_commitment_stream,
-			beefy.subscription_executor,
-		),
-	));
-
+	let handler: beefy_gadget_rpc::BeefyRpcHandler<Block> = beefy_gadget_rpc::BeefyRpcHandler::new(
+		beefy.beefy_commitment_stream,
+		beefy.beefy_best_block_stream,
+		beefy.subscription_executor,
+	)?;
+	io.extend_with(beefy_gadget_rpc::BeefyApi::to_delegate(handler));
 
 	Ok(io)
 }

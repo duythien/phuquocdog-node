@@ -47,7 +47,7 @@ use sp_version::RuntimeVersion;
 // A few exports that help ease life for downstream crates.
 pub use frame_support::{
     construct_runtime, parameter_types,
-    traits::{KeyOwnerProofSystem, Randomness, StorageInfo},
+    traits::{ConstU32,ConstU128, KeyOwnerProofSystem, Randomness, StorageInfo},
     weights::{
         constants::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight, WEIGHT_PER_SECOND},
         IdentityFee, Weight,
@@ -81,10 +81,7 @@ use sp_runtime::{
 use static_assertions::const_assert;
 use constants::{currency::*, contract::*};
 
-
-use pallet_contracts::weights::WeightInfo;
 /// Import the template pallet.
-pub use pallet_template;
 /// Constant values used within the runtime.
 pub mod constants;
 
@@ -153,6 +150,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
     impl_version: 1,
     apis: RUNTIME_API_VERSIONS,
     transaction_version: 1,
+    state_version: 1,
 };
 
 
@@ -298,6 +296,8 @@ impl frame_system::Config for Runtime {
     type SS58Prefix = SS58Prefix;
     /// The set code logic, just the default since we're not a parachain.
     type OnSetCode = ();
+
+    type MaxConsumers = ConstU32<16>;
 }
 
 parameter_types! {
@@ -446,43 +446,44 @@ parameter_types! {
 
 impl<LocalCall> frame_system::offchain::CreateSignedTransaction<LocalCall> for Runtime
 where
-    Call: From<LocalCall>,
+	Call: From<LocalCall>,
 {
-    fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>>(
-        call: Call,
-        public: <Signature as traits::Verify>::Signer,
-        account: AccountId,
-        nonce: Index,
-    ) -> Option<(Call, <UncheckedExtrinsic as traits::Extrinsic>::SignaturePayload)> {
-        let tip = 0;
-        // take the biggest period possible.
-        let period =
-            BlockHashCount::get().checked_next_power_of_two().map(|c| c / 2).unwrap_or(2) as u64;
-        let current_block = System::block_number()
-            .saturated_into::<u64>()
-            // The `System::block_number` is initialized with `n+1`,
-            // so the actual block number is `n`.
-            .saturating_sub(1);
-        let era = Era::mortal(period, current_block);
-        let extra = (
-            frame_system::CheckSpecVersion::<Runtime>::new(),
-            frame_system::CheckTxVersion::<Runtime>::new(),
-            frame_system::CheckGenesis::<Runtime>::new(),
-            frame_system::CheckEra::<Runtime>::from(era),
-            frame_system::CheckNonce::<Runtime>::from(nonce),
-            frame_system::CheckWeight::<Runtime>::new(),
-            pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
-        );
-        let raw_payload = SignedPayload::new(call, extra)
-            .map_err(|e| {
-                log::warn!("Unable to create signed payload: {:?}", e);
-            })
-            .ok()?;
-        let signature = raw_payload.using_encoded(|payload| C::sign(payload, public))?;
-        let address = <Self as frame_system::Config>::Lookup::unlookup(account);
-        let (call, extra, _) = raw_payload.deconstruct();
-        Some((call, (address, signature.into(), extra)))
-    }
+	fn create_transaction<C: frame_system::offchain::AppCrypto<Self::Public, Self::Signature>>(
+		call: Call,
+		public: <Signature as traits::Verify>::Signer,
+		account: AccountId,
+		nonce: Index,
+	) -> Option<(Call, <UncheckedExtrinsic as traits::Extrinsic>::SignaturePayload)> {
+		let tip = 0;
+		// take the biggest period possible.
+		let period =
+			BlockHashCount::get().checked_next_power_of_two().map(|c| c / 2).unwrap_or(2) as u64;
+		let current_block = System::block_number()
+			.saturated_into::<u64>()
+			// The `System::block_number` is initialized with `n+1`,
+			// so the actual block number is `n`.
+			.saturating_sub(1);
+		let era = Era::mortal(period, current_block);
+		let extra = (
+			frame_system::CheckNonZeroSender::<Runtime>::new(),
+			frame_system::CheckSpecVersion::<Runtime>::new(),
+			frame_system::CheckTxVersion::<Runtime>::new(),
+			frame_system::CheckGenesis::<Runtime>::new(),
+			frame_system::CheckEra::<Runtime>::from(era),
+			frame_system::CheckNonce::<Runtime>::from(nonce),
+			frame_system::CheckWeight::<Runtime>::new(),
+			pallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(tip),
+		);
+		let raw_payload = SignedPayload::new(call, extra)
+			.map_err(|e| {
+				log::warn!("Unable to create signed payload: {:?}", e);
+			})
+			.ok()?;
+		let signature = raw_payload.using_encoded(|payload| C::sign(payload, public))?;
+		let address = <Self as frame_system::Config>::Lookup::unlookup(account);
+		let (call, extra, _) = raw_payload.deconstruct();
+		Some((call, (address, signature.into(), extra)))
+	}
 }
 
 impl frame_system::offchain::SigningTypes for Runtime {
@@ -527,21 +528,24 @@ parameter_types! {
     pub const ValueLimit: u32 = 256;
 }
 
-impl pallet_uniques::Config for Runtime {
-    type Event = Event;
-    type ClassId = u32;
-    type InstanceId = u32;
-    type Currency = Balances;
-    type ForceOrigin = frame_system::EnsureRoot<AccountId>;
-    type ClassDeposit = ClassDeposit;
-    type InstanceDeposit = InstanceDeposit;
-    type MetadataDepositBase = MetadataDepositBase;
-    type AttributeDepositBase = MetadataDepositBase;
-    type DepositPerByte = MetadataDepositPerByte;
-    type StringLimit = StringLimit;
-    type KeyLimit = KeyLimit;
-    type ValueLimit = ValueLimit;
-    type WeightInfo = pallet_uniques::weights::SubstrateWeight<Runtime>;
+type ClassId = u128;
+type InstanceId = u128;
+
+impl pallet_uniques::Config<pallet_uniques::Instance1> for Runtime {
+   	type Event = Event;
+	type ClassId = ClassId;
+	type InstanceId = InstanceId;
+	type Currency = Balances;
+	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
+	type ClassDeposit = ClassDeposit;
+	type InstanceDeposit = InstanceDeposit;
+	type MetadataDepositBase = MetadataDepositBase;
+	type AttributeDepositBase = MetadataDepositBase;
+	type DepositPerByte = MetadataDepositPerByte;
+	type StringLimit = StringLimit;
+	type KeyLimit = KeyLimit;
+	type ValueLimit = ValueLimit;
+	type WeightInfo = pallet_uniques::weights::SubstrateWeight<Runtime>;
 }
 
 impl pallet_beefy::Config for Runtime {
@@ -589,6 +593,7 @@ parameter_types! {
     pub const UpwardMessagesLimit: u32 = 10;
 }
 
+
 impl pallet_octopus_appchain::Config for Runtime {
     type AuthorityId = OctopusAppCrypto;
     type Event = Event;
@@ -596,6 +601,10 @@ impl pallet_octopus_appchain::Config for Runtime {
     type PalletId = OctopusAppchainPalletId;
     type LposInterface = OctopusLpos;
     type UpwardMessagesInterface = OctopusUpwardMessages;
+    type ClassId = ClassId;
+    type InstanceId = InstanceId;
+	type Uniques = OctopusUniques;
+	type Convertor = ();
     type Currency = Balances;
     type Assets = OctopusAssets;
     type AssetBalance = AssetBalance;
@@ -654,6 +663,7 @@ impl pallet_assets::Config<pallet_assets::Instance1> for Runtime {
     type Currency = Balances;
     type ForceOrigin = EnsureRoot<AccountId>;
     type AssetDeposit = AssetDeposit;
+    type AssetAccountDeposit = ConstU128<DOLLARS>;
     type MetadataDepositBase = MetadataDepositBase;
     type MetadataDepositPerByte = MetadataDepositPerByte;
     type ApprovalDeposit = ApprovalDeposit;
@@ -669,41 +679,26 @@ impl pallet_sudo::Config for Runtime {
 }
 
 // Local pallets
-/// Configure the pallet-template in pallets/template.
-impl pallet_template::Config for Runtime {
-    type Event = Event;
-}
+/// Configure the pallet-currency in pallets/currency.
+
 impl pallet_currency::Config for Runtime {
     type Event = Event;
 }
 impl pallet_randomness_collective_flip::Config for Runtime {}
 
 parameter_types! {
-    pub ContractDeposit: Balance = deposit(
-        1,
-          <pallet_contracts::Pallet<Runtime>>::contract_info_size(),
-    );
+	pub const DepositPerItem: Balance = deposit(1, 0);
+	pub const DepositPerByte: Balance = deposit(0, 1);
     // The lazy deletion runs inside on_initialize.
-    pub DeletionWeightLimit: Weight = AVERAGE_ON_INITIALIZE_RATIO *
-        RuntimeBlockWeights::get().max_block;
+    pub DeletionWeightLimit: Weight = RuntimeBlockWeights::get()
+		.per_class
+		.get(DispatchClass::Normal)
+		.max_total
+		.unwrap_or(RuntimeBlockWeights::get().max_block);
     // The weight needed for decoding the queue should be less or equal than a fifth
     // of the overall weight dedicated to the lazy deletion.
-    pub DeletionQueueDepth: u32 = ((DeletionWeightLimit::get() / (
-            <Runtime as pallet_contracts::Config>::WeightInfo::on_initialize_per_queue_item(1) -
-            <Runtime as pallet_contracts::Config>::WeightInfo::on_initialize_per_queue_item(0)
-        )) / 5) as u32;
-    pub Schedule: pallet_contracts::Schedule<Runtime> = {
-        let mut schedule = pallet_contracts::Schedule::<Runtime>::default();
-        // We decided to **temporarily* increase the default allowed contract size here
-        // (the default is `128 * 1024`).
-        //
-        // Our reasoning is that a number of people ran into `CodeTooLarge` when trying
-        // to deploy their contracts. We are currently introducing a number of optimizations
-        // into ink! which should bring the contract sizes lower. In the meantime we don't
-        // want to pose additional friction on developers.
-        schedule.limits.code_len = 256 * 1024;
-        schedule
-    };
+  	pub const DeletionQueueDepth: u32 = 128;
+    pub Schedule: pallet_contracts::Schedule<Runtime> = Default::default();
 }
 
 impl pallet_contracts::Config for Runtime {
@@ -719,7 +714,8 @@ impl pallet_contracts::Config for Runtime {
     /// change because that would break already deployed contracts. The `Call` structure itself
     /// is not allowed to change the indices of existing pallets, too.
     type CallFilter = frame_support::traits::Nothing;
-    type ContractDeposit = ContractDeposit;
+    type DepositPerItem = DepositPerItem;
+	type DepositPerByte = DepositPerByte;
     type WeightPrice = pallet_transaction_payment::Pallet<Self>;
     type WeightInfo = pallet_contracts::weights::SubstrateWeight<Self>;
     type ChainExtension = ();
@@ -727,6 +723,7 @@ impl pallet_contracts::Config for Runtime {
     type DeletionWeightLimit = DeletionWeightLimit;
     type Schedule = Schedule;
     type CallStack = [pallet_contracts::Frame<Self>; 31];
+    type AddressGenerator = pallet_contracts::DefaultAddressGenerator;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
@@ -747,6 +744,7 @@ construct_runtime!(
         OctopusLpos: pallet_octopus_lpos,
         OctopusUpwardMessages: pallet_octopus_upward_messages,
         OctopusAssets: pallet_assets::<Instance1>,
+        OctopusUniques: pallet_uniques::<Instance1>,
         Session: pallet_session,
         Grandpa: pallet_grandpa,
         ImOnline: pallet_im_online,
@@ -754,10 +752,8 @@ construct_runtime!(
         Mmr: pallet_mmr,
         Beefy: pallet_beefy,
         MmrLeaf: pallet_beefy_mmr,
-        Uniques: pallet_uniques,
         Sudo: pallet_sudo,
         // Include the custom logic from the pallet-template in the runtime.
-        TemplateModule: pallet_template,
         Currency: pallet_currency,
         Contracts: pallet_contracts,
     }
@@ -771,6 +767,7 @@ pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 pub type Block = generic::Block<Header, UncheckedExtrinsic>;
 /// The SignedExtension to the basic transaction logic.
 pub type SignedExtra = (
+	frame_system::CheckNonZeroSender<Runtime>,
     frame_system::CheckSpecVersion<Runtime>,
     frame_system::CheckTxVersion<Runtime>,
     frame_system::CheckGenesis<Runtime>,
@@ -789,7 +786,7 @@ pub type Executive = frame_executive::Executive<
     Block,
     frame_system::ChainContext<Runtime>,
     Runtime,
-    AllPallets,
+    AllPalletsWithSystem
 >;
 
 impl_runtime_apis! {
@@ -973,10 +970,10 @@ impl_runtime_apis! {
     }
 
     impl beefy_primitives::BeefyApi<Block> for Runtime {
-        fn validator_set() -> beefy_primitives::ValidatorSet<BeefyId> {
-            Beefy::validator_set()
-        }
-    }
+		fn validator_set() -> Option<beefy_primitives::ValidatorSet<BeefyId>> {
+			Beefy::validator_set()
+		}
+	}
 
     impl pallet_mmr_primitives::MmrApi<Block, Hash> for Runtime {
         fn generate_proof(leaf_index: u64)
@@ -1020,22 +1017,33 @@ impl_runtime_apis! {
             dest: AccountId,
             value: Balance,
             gas_limit: u64,
+            storage_deposit_limit: Option<Balance>,
             input_data: Vec<u8>,
-        ) -> pallet_contracts_primitives::ContractExecResult {
-            Contracts::bare_call(origin, dest, value, gas_limit, input_data, CONTRACTS_DEBUG_OUTPUT)
+        ) -> pallet_contracts_primitives::ContractExecResult<Balance> {
+            Contracts::bare_call(origin, dest, value, gas_limit, storage_deposit_limit, input_data, CONTRACTS_DEBUG_OUTPUT)
         }
 
         fn instantiate(
             origin: AccountId,
             endowment: Balance,
             gas_limit: u64,
+            storage_deposit_limit: Option<Balance>,
             code: pallet_contracts_primitives::Code<Hash>,
             data: Vec<u8>,
             salt: Vec<u8>,
-        ) -> pallet_contracts_primitives::ContractInstantiateResult<AccountId>
+        ) -> pallet_contracts_primitives::ContractInstantiateResult<AccountId,Balance>
         {
-            Contracts::bare_instantiate(origin, endowment, gas_limit, code, data, salt, CONTRACTS_DEBUG_OUTPUT)
+            Contracts::bare_instantiate(origin, endowment, gas_limit, storage_deposit_limit, code, data, salt, CONTRACTS_DEBUG_OUTPUT)
         }
+
+        fn upload_code(
+			origin: AccountId,
+			code: Vec<u8>,
+			storage_deposit_limit: Option<Balance>,
+		) -> pallet_contracts_primitives::CodeUploadResult<Hash, Balance>
+		{
+			Contracts::bare_upload_code(origin, code, storage_deposit_limit)
+		}
 
         fn get_storage(
             address: AccountId,
@@ -1062,7 +1070,6 @@ impl_runtime_apis! {
             list_benchmark!(list, extra, frame_system, SystemBench::<Runtime>);
             list_benchmark!(list, extra, pallet_balances, Balances);
             list_benchmark!(list, extra, pallet_timestamp, Timestamp);
-            list_benchmark!(list, extra, pallet_template, TemplateModule);
             list_benchmark!(list, extra, pallet_currency, Currency);
 
             let storage_info = AllPalletsWithSystem::storage_info();
@@ -1101,7 +1108,6 @@ impl_runtime_apis! {
             add_benchmark!(params, batches, frame_system, SystemBench::<Runtime>);
             add_benchmark!(params, batches, pallet_balances, Balances);
             add_benchmark!(params, batches, pallet_timestamp, Timestamp);
-            add_benchmark!(params, batches, pallet_template, TemplateModule);
             add_benchmark!(params, batches, pallet_currency, Currency);
 
             if batches.is_empty() { return Err("Benchmark not found for this pallet.".into()) }
