@@ -47,16 +47,15 @@ pub struct FlatPostType {
 
 impl From<PostType> for FlatPostType {
     fn from(from: PostType) -> Self {
-        if from == PostType::RegularPost {
-            return Self {
+        match from {
+            PostType::RegularPost => Self {
                 is_regular_post: Some(true),
                 is_comment: Some(false),
-            };
-        } else {
-            return Self {
-                is_regular_post: Some(true),
-                is_comment: Some(false),
-            };
+            },
+            PostType::Comment { parent_id: _ } => Self {
+                is_regular_post: Some(false),
+                is_comment: Some(true),
+            },
         }
     }
 }
