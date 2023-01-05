@@ -9,7 +9,7 @@ use frame_support::{
 };
 use pallet_support::WhoAndWhen;
 #[cfg(feature = "std")]
-use serde::Deserialize;
+use serde::{Deserialize, Serialize, Serializer};
 use sp_std::vec::Vec;
 /// Data structure representing a post
 #[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]
@@ -53,19 +53,30 @@ pub enum PostType {
 }
 
 /// The content of a post refers text, video, etc
-#[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]
+#[derive(Encode, From, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(Deserialize))]
 pub enum PostContent {
     Content(Vec<u8>),
 }
-impl From<PostContent> for Vec<u8> {
-    fn from(content: PostContent) -> Vec<u8> {
-        match content {
-            PostContent::Content(vec_u8) => vec_u8,
-        }
+// impl From<PostContent> for Vec<u8> {
+//     fn from(content: PostContent) -> Vec<u8> {
+//         match content {
+//             PostContent::Content(vec_u8) => vec_u8,
+//         }
+//     }
+// }
+#[cfg(feature = "std")]
+impl Serialize for PostContent {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let content_vec: Vec<u8> = self.clone().into();
+
+        // If Bytes slice is invalid, then empty string will be returned
+        serializer.serialize_str(std::str::from_utf8(&content_vec).unwrap_or_default())
     }
 }
-
 #[derive(Encode, Decode, RuntimeDebug)]
 pub enum ContentError {
     /// Post content is empty.
