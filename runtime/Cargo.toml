@@ -71,6 +71,9 @@ std = [
     'pallet-octopus-upward-messages/std',
     # Local Pallet
     'pallet-currency/std',
+    'pallet-support/std',
+    'pallet-posts-runtime-api/std',
+
 ]
 
 [build-dependencies]
@@ -134,6 +137,10 @@ pallet-contracts-primitives = { git = 'https://github.com/paritytech/substrate.g
 pallet-randomness-collective-flip = { version = '4.0.0-dev', git = 'https://github.com/paritytech/substrate.git', branch = 'polkadot-v0.9.18', default-features = false }
 #pallet-contracts-rpc = { git = 'https://github.com/paritytech/substrate.git', branch = 'polkadot-v0.9.18', default-features = false }
 pallet-contracts-rpc-runtime-api = { version = '4.0.0-dev', git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.18', default-features = false }
+
+pallet-posts-runtime-api = { version = "4.0.0-dev", default-features = false, path = "../pallets/posts/rpc/runtime-api" }
+pallet-posts = { version = "4.0.0-dev", default-features = false, path = "../pallets/posts" }
+pallet-support = { version = "4.0.0-dev", default-features = false, path = "../pallets/support" }
 
 pallet-octopus-appchain = { git = 'https://github.com/octopus-network/octopus-pallets.git', branch = 'release-v0.9.18', default-features = false }
 pallet-octopus-lpos = { git = 'https://github.com/octopus-network/octopus-pallets.git', branch = 'release-v0.9.18', default-features = false }

@@ -1,0 +1,51 @@
+[package]
+name = "pallet-posts-rpc"
+version = "4.0.0-dev"
+description = "RPC methods for the posts pallet."
+authors = ["<Thien Tran fcduythien@gmail.com>"]
+homepage = "https://substrate.io/"
+edition = "2021"
+license = "Unlicense"
+publish = false
+repository = "https://github.com/substrate-developer-hub/substrate-node-template/"
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+codec = { package = "parity-scale-codec", version = "3.0.0", default-features = false, features = [
+	"derive",
+] }
+
+# jsonrpc-core = '18.0.0'
+# jsonrpc-core-client = '18.0.0'
+# jsonrpc-derive = '18.0.0'
+jsonrpsee = { version = "0.14.0", features = ["server", "macros"] }
+serde = { features = ['derive'], optional = true, version = '1.0.119' }
+sp-api = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.18", default-features = false }
+sp-std = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.18", default-features = false }
+sp-blockchain = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.18", default-features = false }
+sp-runtime = { default-features = false, version = "6.0.0", git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.18" }
+
+# Custom Runtime API
+pallet-posts-runtime-api = { default-features = false, path = './runtime-api' }
+pallet-support= { default-features = false, path = '../../support' }
+pallet-posts= { default-features = false, path = '../../posts' }
+
+[dev-dependencies]
+sp-core = { default-features = false, version = "6.0.0", git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.18" }
+sp-io = { default-features = false, version = "6.0.0", git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.18" }
+
+[features]
+default = ["std"]
+std = [
+	"serde",
+	"codec/std",
+	"sp-std/std",
+	"sp-api/std",
+	"sp-runtime/std",
+	"pallet-support/std",
+	"pallet-posts/std",
+	"pallet-posts-runtime-api/std"
+]
+
