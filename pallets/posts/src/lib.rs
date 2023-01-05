@@ -4,12 +4,7 @@ pub mod functions;
 pub mod post_types;
 pub mod reaction_types;
 pub mod rpc;
-// Re-export pallet items so that they can be accessed from the crate namespace.
-// TODO: Remove this wildcard import (pretty gnarly to do so, at present)
-pub use pallet::{
-    Config, Error, Event, Pallet, PostById, PostReactionKindByAccount, __substrate_call_check,
-    __substrate_event_check, tt_default_parts, tt_error_token,
-};
+pub use pallet::*;
 use pallet_support::PostId;
 
 #[frame_support::pallet]
@@ -142,7 +137,7 @@ pub mod pallet {
 
             let new_post: Post<T> = Post::new(new_post_id, creator.clone(), post_type, content);
             match post_type {
-                PostType::RegularPost => {},
+                PostType::RegularPost => {}
                 PostType::Comment { .. } => Self::create_comment(new_post_id, post_type)?,
             }
             // TODO: Add more checks. For instance, check if the one commenting
@@ -154,7 +149,10 @@ pub mod pallet {
             NextPostId::<T>::mutate(|n| {
                 *n += 1;
             });
-            Self::deposit_event(Event::PostCreated { who: creator, post_id: new_post_id });
+            Self::deposit_event(Event::PostCreated {
+                who: creator,
+                post_id: new_post_id,
+            });
             Ok(())
         }
 
@@ -185,7 +183,11 @@ pub mod pallet {
                     post_id,
                     reaction_kind: kind,
                 },
-                |_| Event::PostReactionUpdated { account: creator, post_id, reaction_kind: kind },
+                |_| Event::PostReactionUpdated {
+                    account: creator,
+                    post_id,
+                    reaction_kind: kind,
+                },
             ));
             Ok(())
         }

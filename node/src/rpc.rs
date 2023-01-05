@@ -134,7 +134,7 @@ where
 {
     use pallet_contracts_rpc::{Contracts, ContractsApi};
     use pallet_mmr_rpc::{Mmr, MmrApi};
-    use pallet_posts_rpc::{Posts, PostsApiServer};
+    use pallet_posts_rpc::{Posts, PostsApi};
     use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApi};
     use substrate_frame_rpc_system::{FullSystem, SystemApi};
 
@@ -198,7 +198,7 @@ where
     // Contracts RPC API extension
     io.extend_with(ContractsApi::to_delegate(Contracts::new(client.clone())));
 
-    io.extend_with(PostsApiServer::to_delegate(Posts::new(client.clone())));
+    io.extend_with(PostsApi::to_delegate(Posts::new(client.clone())));
 
     io.extend_with(sc_sync_state_rpc::SyncStateRpcApi::to_delegate(
         sc_sync_state_rpc::SyncStateRpcHandler::new(

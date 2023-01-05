@@ -48,9 +48,15 @@ pub struct FlatPostType {
 impl From<PostType> for FlatPostType {
     fn from(from: PostType) -> Self {
         if from == PostType::RegularPost {
-            return Self { is_regular_post: Some(true), is_comment: Some(false) };
+            return Self {
+                is_regular_post: Some(true),
+                is_comment: Some(false),
+            };
         } else {
-            return Self { is_regular_post: Some(true), is_comment: Some(false) };
+            return Self {
+                is_regular_post: Some(true),
+                is_comment: Some(false),
+            };
         }
     }
 }
@@ -63,7 +69,9 @@ pub struct FlatContent {
 
 impl From<PostContent> for FlatContent {
     fn from(content: PostContent) -> Self {
-        Self { content: content.clone() }
+        Self {
+            content: content.clone(),
+        }
     }
 }
 
@@ -82,8 +90,17 @@ impl Serialize for PostContent {
 
 impl<T: Config> From<Post<T>> for FlatPost<T::AccountId, T::BlockNumber> {
     fn from(from: Post<T>) -> Self {
-        let Post { id, created, owner, content, dislikes, likes, comments_id, post_type, .. } =
-            from;
+        let Post {
+            id,
+            created,
+            owner,
+            content,
+            dislikes,
+            likes,
+            comments_id,
+            post_type,
+            ..
+        } = from;
 
         Self {
             id,

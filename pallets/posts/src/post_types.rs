@@ -1,4 +1,5 @@
 use super::{Config, PostId};
+use derive_more::From;
 use frame_support::pallet_prelude::DispatchResult;
 use frame_support::sp_runtime::DispatchError;
 use frame_support::{
@@ -7,7 +8,6 @@ use frame_support::{
     RuntimeDebug,
 };
 use pallet_support::WhoAndWhen;
-
 #[cfg(feature = "std")]
 use serde::Deserialize;
 use sp_std::vec::Vec;
@@ -84,7 +84,7 @@ impl PostContent {
             PostContent::Content(c) => {
                 ensure!(c.len() != 0, ContentError::EmptyContent);
                 Ok(())
-            },
+            }
         }
     }
 }
