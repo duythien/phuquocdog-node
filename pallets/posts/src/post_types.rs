@@ -53,18 +53,18 @@ pub enum PostType {
 }
 
 /// The content of a post refers text, video, etc
-#[derive(Encode, From, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]
+#[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(Deserialize))]
 pub enum PostContent {
     Content(Vec<u8>),
 }
-// impl From<PostContent> for Vec<u8> {
-//     fn from(content: PostContent) -> Vec<u8> {
-//         match content {
-//             PostContent::Content(vec_u8) => vec_u8,
-//         }
-//     }
-// }
+impl From<PostContent> for Vec<u8> {
+    fn from(content: PostContent) -> Vec<u8> {
+        match content {
+            PostContent::Content(vec_u8) => vec_u8,
+        }
+    }
+}
 
 #[derive(Encode, Decode, RuntimeDebug)]
 pub enum ContentError {
