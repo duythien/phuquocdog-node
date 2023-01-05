@@ -765,7 +765,7 @@ construct_runtime!(
         // Include the custom logic from the pallet-template in the runtime.
         Currency: pallet_currency,
         Contracts: pallet_contracts,
-        Posts, pallet_posts
+        Posts: pallet_posts
     }
 );
 
