@@ -64,17 +64,16 @@ where
 
         let runtime_api_result = api.get_feed(&at, account, offset, limit);
         //runtime_api_result
-        runtime_api_result.map_err(runtime_error_into_rpc_err)
+        runtime_api_result.map_err(map_rpc_error)
     }
 }
 
-const RUNTIME_ERROR: i64 = 1;
-
+//const RUNTIME_ERROR: i64 = 1;
 // Converts a runtime trap into an RPC error.
-fn runtime_error_into_rpc_err(err: impl std::fmt::Display) -> Error {
+pub fn map_rpc_error(err: impl std::fmt::Debug) -> Error {
     Error {
-        code: ErrorCode::ServerError(RUNTIME_ERROR),
-        message: "Runtime error".into(),
-        data: Some(err.to_string().into()),
+        code: ErrorCode::ServerError(1),
+        message: "An RPC error occurred".into(),
+        data: Some(format!("{:?}", err).into()),
     }
 }

@@ -74,7 +74,18 @@ impl From<PostContent> for FlatContent {
         }
     }
 }
+#[cfg(feature = "std")]
+impl Serialize for PostContent {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let content_vec: Vec<u8> = self.clone().into();
 
+        // If Bytes slice is invalid, then empty string will be returned
+        serializer.serialize_str(std::str::from_utf8(&content_vec).unwrap_or_default())
+    }
+}
 impl<T: Config> From<Post<T>> for FlatPost<T::AccountId, T::BlockNumber> {
     fn from(from: Post<T>) -> Self {
         let Post {
